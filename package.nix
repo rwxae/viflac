@@ -4,8 +4,9 @@ pkgs.writeShellApplication {
   name = "viflac";
   runtimeInputs = with pkgs; [
     coreutils
-    flac
     file
+    flac
+    gnused
   ];
   text = builtins.readFile ./viflac.sh;
 }
