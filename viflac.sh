@@ -27,7 +27,7 @@ if ! metaflac --export-tags-to="$TEMP_TAGS" "$TARGET_FILE"; then
     exit 1
 fi
 
-sed -i -e '/^LYRICS=/I,/^[^ ]*=/ { /^LYRICS=/I d; /^[A-Z_]*=/ !d; }' "$TEMP_TAGS"
+sed -i -e '/^LYRICS=/I,/^[^ ]*=/ { /^LYRICS=/I d; /^[A-Z_]*=/I !d; }' "$TEMP_TAGS"
 
 BEFORE_HASH=$(md5sum "$TEMP_TAGS" | awk '{ print $1 }')
 
