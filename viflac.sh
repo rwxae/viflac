@@ -27,6 +27,8 @@ if ! metaflac --export-tags-to="$TEMP_TAGS" "$TARGET_FILE"; then
     exit 1
 fi
 
+sed -i -e '/^LYRICS=/I,/^[A-Z_]*=/ { /^LYRICS=/I! { /^[A-Z_]*=/!d }; /^LYRICS=/Id }' "$TEMP_TAGS"
+
 ${EDITOR:-nano} "$TEMP_TAGS"
 
 read -rp "Modify $TARGET_FILE? This will overwrite existing metadata. [y/N]" confirm
@@ -35,7 +37,7 @@ if [[ ! "$confirm" =~ ^[yY]$ ]]; then
     exit 0
 fi
 
-if metaflac --remove-all-tags --import-tags-from="$TEMP_TAGS" "$TARGET_FILE"; then
+if metaflac --remove-all-tags-except=LYRICS --import-tags-from="$TEMP_TAGS" "$TARGET_FILE"; then
     echo "Success: Tags updated."
 else
     echo "Error: Failed to import tags."
