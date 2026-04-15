@@ -27,7 +27,7 @@ if ! metaflac --export-tags-to="$TEMP_TAGS" "$TARGET_FILE"; then
     exit 1
 fi
 
-sed -i -e '/^LYRICS=/I,/^[A-Z_]*=/ { /^LYRICS=/I! { /^[A-Z_]*=/!d }; /^LYRICS=/Id }' "$TEMP_TAGS"
+sed -i -e '/^LYRICS=/I,/^[^ ]*=/ { /^LYRICS=/I d; /^[A-Z_]*=/ !d; }' "$TEMP_TAGS"
 
 ${EDITOR:-nano} "$TEMP_TAGS"
 
