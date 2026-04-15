@@ -29,11 +29,14 @@ fi
 
 sed -i -e '/^LYRICS=/I,/^[^ ]*=/ { /^LYRICS=/I d; /^[A-Z_]*=/ !d; }' "$TEMP_TAGS"
 
+BEFORE_HASH=$(md5sum "$TEMP_TAGS" | awk '{ print $1 }')
+
 ${EDITOR:-nano} "$TEMP_TAGS"
 
-read -rp "Modify $TARGET_FILE? This will overwrite existing metadata. [y/N]" confirm
-if [[ ! "$confirm" =~ ^[yY]$ ]]; then
-    echo "Changes discarded."
+AFTER_HASH=$(md5sum "$TEMP_TAGS" | awk '{ print $1 }')
+
+if [[ "$BEFORE_HASH" == "$AFTER_HASH" ]]; then
+    echo "No changes detected. Aborting."
     exit 0
 fi
 
