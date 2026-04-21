@@ -27,7 +27,7 @@ if ! metaflac --export-tags-to="$TEMP_TAGS" "$TARGET_FILE"; then
     exit 1
 fi
 
-sed -i -e '/^LYRICS=/I,/^[^ ]*=/ { /^LYRICS=/I d; /^[A-Z_]*=/I !d; }' "$TEMP_TAGS"
+sed -i -e '/^.*LYRICS=/I,/^[^ ]*=/ { /^.*LYRICS=/I d; /^[A-Z_]*=/I !d; }' "$TEMP_TAGS"
 
 BEFORE_HASH=$(md5sum "$TEMP_TAGS" | awk '{ print $1 }')
 
@@ -40,7 +40,7 @@ if [[ "$BEFORE_HASH" == "$AFTER_HASH" ]]; then
     exit 0
 fi
 
-if metaflac --remove-all-tags-except=LYRICS --import-tags-from="$TEMP_TAGS" "$TARGET_FILE"; then
+if metaflac --remove-all-tags-except="LYRICS"="UNSYNCEDLYRICS"="UNSYNCED LYRICS" --import-tags-from="$TEMP_TAGS" "$TARGET_FILE"; then
     echo "Success: Tags updated."
 else
     echo "Error: Failed to import tags."
