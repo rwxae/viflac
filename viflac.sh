@@ -7,7 +7,6 @@ fi
 
 TARGET_FILE="$1"
 
-# 1. Validate file exists and is actually a FLAC file
 if [[ ! -f "$TARGET_FILE" ]]; then
     echo "Error: File '$TARGET_FILE' not found."
     exit 1
@@ -21,7 +20,6 @@ fi
 TEMP_TAGS=$(mktemp -t flac-tags.XXXXXX.txt)
 trap 'rm -f "$TEMP_TAGS"' EXIT
 
-# Export current tags
 if ! metaflac --export-tags-to="$TEMP_TAGS" "$TARGET_FILE"; then
     echo "Error: Failed to export tags."
     exit 1
